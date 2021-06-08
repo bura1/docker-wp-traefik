@@ -1,5 +1,3 @@
-# Docker Compose file for Wordpress with Traefik configuration
+# docker-wp-traefik
 
-A Docker Compose file used to run a WordPress container with Traefik configuration. 
-
-Useful for accessing the container using a domain.
+Docker Compose file for Wordpress with Traefik configuration. Used for accessing the container using a domain.
