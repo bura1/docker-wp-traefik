@@ -37,10 +37,13 @@ services:
       - db_volume:/var/lib/mysql
 
 networks:
-    default:
-        external:
-            name: main_net
+  default:
+    external:
+      name: main_net
 
 volumes:
-  wp_volume: {}
-  db_volume: {}
+  wp_zivjetizdravo:
+    external: true
+  db_zivjetizdravo:
+    external: true
+
