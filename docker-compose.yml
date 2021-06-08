@@ -1,0 +1,46 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: db_name
+      WORDPRESS_DB_USER: user_name
+      WORDPRESS_DB_PASSWORD: password
+    volumes:
+      - wp_volume:/var/www/html
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.middlewares.wp-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.routers.wp-http.entrypoints=http'
+      - 'traefik.http.routers.wp-http.middlewares=wp-redirect'
+      - 'traefik.http.routers.wp-http.rule=Host(`mysite.com`)'
+      - 'traefik.http.routers.wp-https.entrypoints=https'
+      - 'traefik.http.routers.wp-https.rule=Host(`mysite.com`)'
+      - 'traefik.http.routers.wp-https.service=wp-https'
+      - 'traefik.http.routers.wp-https.tls=true'
+      - 'traefik.http.routers.wp-https.tls.certresolver=default'
+      - 'traefik.http.services.wp-https.loadbalancer.server.port=80'
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: user_name
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db_volume:/var/lib/mysql
+
+networks:
+    default:
+        external:
+            name: main_net
+
+volumes:
+  wp_volume: {}
+  db_volume: {}
